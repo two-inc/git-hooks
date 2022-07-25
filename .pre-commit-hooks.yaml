@@ -1,7 +1,7 @@
 - id: linear-issue-in-commit-msg
   name: linear-issue-in-commit-msg
   description: "Checks if commit message contains reference to Linear issue"
-  entry: linear-issue-in-commit-msg.sh
+  entry: ./linear-issue-in-commit-msg.sh
   language: script
   always_run: true
   stages: [commit-msg]
