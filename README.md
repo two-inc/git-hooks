@@ -12,7 +12,7 @@ To only check for a reference to a Linear issue in your commit message, add this
 
 ```yaml
 # .pre-commit-config.yaml
-- repo: https://github.com/two-inc/git-hooks
+- repo: https://github.com/two-inc/git-hooks.git
   rev: 0.0.1
     hooks:
       - id: linear-ref
@@ -22,7 +22,17 @@ To check for both a reference to a Linear issue as well as a conventional commit
 
 ```yaml
 # .pre-commit-config.yaml
-- repo: https://github.com/two-inc/git-hooks
+- repo: https://github.com/two-inc/git-hooks.git
+  rev: 0.0.1
+    hooks:
+      - id: commit-type-with-linear-ref
+```
+
+Alternatively, you can use ssh
+
+```yaml
+# .pre-commit-config.yaml
+- repo: git@github.com:two-inc/git-hooks.git
   rev: 0.0.1
     hooks:
       - id: commit-type-with-linear-ref
