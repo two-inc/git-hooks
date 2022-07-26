@@ -1,0 +1,14 @@
+- id: linear-ref
+  name: Linear reference in commit message
+  description: "Checks if commit message contains reference to Linear issue"
+  entry: linear-ref-in-msg.sh
+  language: script
+  always_run: true
+  stages: [commit-msg]
+- id: commit-type-with-linear-ref
+  name: Conventional commit type and Linear reference in commit message
+  description: "Checks if commit message starts with Linear reference and conventional commit type"
+  entry: commit-type-with-linear-ref-in-msg.sh
+  language: script
+  always_run: true
+  stages: [commit-msg]
