@@ -9,7 +9,7 @@
 red=$(tput setaf 1)
 normal=$(tput sgr0)
 commit_msg=$(cat $1)
-linear_ref=$'t-[0-9]{4}'
+linear_ref=$'(t|T)-[0-9]{4}'
 conventional_commit_types=$'(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)'
 regex="^$linear_ref\/$conventional_commit_types!?:[[:space:]]"
 error=$'Commit message needs to be prefixed with a reference to a Linear issue '
