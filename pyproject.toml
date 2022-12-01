@@ -13,3 +13,9 @@ push = false
 "README.md" = [
     'rev: {version}',
 ]
+"commit-type-with-linear-ref-in-msg.sh" = [
+    'two-inc/git-hooks/blob/{version}/README.md'
+]
+"linear-ref-in-msg.sh" = [
+    'two-inc/git-hooks/blob/{version}/README.md'
+]

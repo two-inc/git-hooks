@@ -9,7 +9,7 @@ linear_ref=$'(t|T)-[0-9]{4}'
 skip_if=$'|Merge .+|Revert .+|Bump version .+'
 regex="^$linear_ref$skip_if"
 error=$'Commit message needs to contain a reference to a Linear issue, e.g. t-5482\n'
-error+=$'See https://github.com/two-inc/git-hooks/blob/main/README.md for more info.'
+error+=$'See https://github.com/two-inc/git-hooks/blob/22.11.30/README.md for more info.'
 
 if ! [[ "$commit_msg" =~ $regex ]]; then
     echo "$red$error$normal"

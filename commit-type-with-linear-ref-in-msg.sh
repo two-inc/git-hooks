@@ -16,7 +16,7 @@ skip_if=$'|Merge .+|Revert .+|Bump version .+'
 regex="^$linear_ref\/$conventional_commit_types!?:[[:space:]]$skip_if"
 error=$'Commit message needs to be prefixed with a reference to a Linear issue '
 error+=$'and a conventional commit type,\ne.g. \'t-5482/feat: amazing new feature\'.\n'
-error+=$'See https://github.com/two-inc/git-hooks/blob/main/README.md for more info.'
+error+=$'See https://github.com/two-inc/git-hooks/blob/22.11.30/README.md for more info.'
 
 if ! [[ "$commit_msg" =~ $regex ]]; then
     echo "$red$error$normal"
