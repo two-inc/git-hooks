@@ -6,7 +6,7 @@ normal=$(tput sgr0)
 commit_msg=$(cat $1)
 linear_ref=$'(t|T)-[0-9]{4}'
 # skip on "Merge branch...", "Merge pull...", etc.
-skip_if=$'|Merge .+|Revert .+'
+skip_if=$'|Merge .+|Revert .+|Bump version .+'
 regex="^$linear_ref$skip_if"
 error=$'Commit message needs to contain a reference to a Linear issue, e.g. t-5482\n'
 error+=$'See https://github.com/two-inc/git-hooks/blob/main/README.md for more info.'
