@@ -1,0 +1,21 @@
+[tool.bumpver]
+current_version = "22.11.30"
+version_pattern = "0Y.0M.0D[-INC0]"
+commit_message = "Bump version {old_version} -> {new_version}"
+commit = true
+tag = false
+push = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'current_version = "{version}"',
+]
+"README.md" = [
+    'rev: {version}',
+]
+"commit-type-with-linear-ref-in-msg.sh" = [
+    'two-inc/git-hooks/blob/{version}/README.md'
+]
+"linear-ref-in-msg.sh" = [
+    'two-inc/git-hooks/blob/{version}/README.md'
+]
