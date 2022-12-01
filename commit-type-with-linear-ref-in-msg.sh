@@ -12,13 +12,11 @@ commit_msg=$(cat $1)
 linear_ref=$'(t|T)-[0-9]{4}'
 conventional_commit_types=$'(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)'
 # skip on "Merge branch...", "Merge pull...", etc.
-skip_if=$'|Merge .+|(fixup|squash)! .+|WIP: .+'
+skip_if=$'|Merge .+'
 regex="^$linear_ref\/$conventional_commit_types!?:[[:space:]]$skip_if"
 error=$'Commit message needs to be prefixed with a reference to a Linear issue '
 error+=$'and a conventional commit type,\ne.g. \'t-5482/feat: amazing new feature\'.\n'
-error+=$'See https://github.com/two-inc/git-hooks/README.md for more info.\n'
-error+=$'Alternatively, you can save work-in-progress by prefixing your commit message as follows:\n'
-error+=$'$ WIP: <commit message>'
+error+=$'See https://github.com/two-inc/git-hooks/blob/main/README.md for more info.'
 
 if ! [[ "$commit_msg" =~ $regex ]]; then
     echo "$red$error$normal"
