@@ -13,7 +13,7 @@ To only check for a reference to a Linear issue in your commit message, add this
 ```yaml
 # .pre-commit-config.yaml
 - repo: https://github.com/two-inc/git-hooks.git
-  rev: 22.12.08
+  rev: 22.12.08-1
     hooks:
       - id: linear-ref
 ```
@@ -23,7 +23,7 @@ To check for both a reference to a Linear issue as well as a conventional commit
 ```yaml
 # .pre-commit-config.yaml
 - repo: https://github.com/two-inc/git-hooks.git
-  rev: 22.12.08
+  rev: 22.12.08-1
     hooks:
       - id: commit-type-with-linear-ref
 ```
@@ -33,7 +33,7 @@ Alternatively, you can use ssh
 ```yaml
 # .pre-commit-config.yaml
 - repo: git@github.com:two-inc/git-hooks.git
-  rev: 22.12.08
+  rev: 22.12.08-1
     hooks:
       - id: commit-type-with-linear-ref
 ```
@@ -50,7 +50,8 @@ Alternatively, you can use ssh
 
 ## Release Process (git-hooks repo)
 
-1. On `main` run `bumpver update --dry` to check version update will be as expected.
+1. If you have permission to push to main directly, skip to step 2. Otherwise create a new Linear ticket with a title "git-hooks release X.Y.Z" and a new branch based on that Linear ticket branching off of main.
+2. Run `bumpver update --dry` to check version update will be as expected.
 5. Run `bumpver update` to update git-hooks version. This creates a bump commit.
 6. Push directly to `main` if you have permission to do so or via a PR if not.
 8. Check out `main` branch and set tag with `git tag X.Y.Z` based on [CalVer](https://calver.org/) convention.
