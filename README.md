@@ -53,6 +53,6 @@ Alternatively, you can use ssh
 1. On `main` run `bumpver update --dry` to check version update will be as expected.
 5. Run `bumpver update` to update git-hooks version. This creates a bump commit.
 6. Push directly to `main` if you have permission to do so or via a PR if not.
-8. Check out `main` branch and set tag with `git tag vX.Y.Z` based on [CalVer](https://calver.org/) convention.
+8. Check out `main` branch and set tag with `git tag X.Y.Z` based on [CalVer](https://calver.org/) convention.
 9. Push tags with `git push --tags`.
 10. Go to GH and draft a new release - choose tag and select "generate release notes".
