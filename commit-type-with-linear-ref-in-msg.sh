@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # This hook verifies that the commit message contains a reference to a Linear issue
 # as well as a conventional commit type at the start
 # The commit message needs to conform to

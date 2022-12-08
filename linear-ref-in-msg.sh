@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # This hook verifies that the commit message contains a reference to a Linear issue
 
 red=$(tput setaf 1)
