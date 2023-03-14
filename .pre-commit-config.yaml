@@ -5,3 +5,9 @@ repos:
             id: commit-type-with-linear-ref
             language: system
             entry: ./commit-type-with-linear-ref-in-msg.sh
+    - repo: local
+      hooks:
+          - name: prepare-commit-msg-with-linear-ref
+            id: prepare-commit-msg-with-linear-ref
+            language: system
+            entry: ./prepare-commit-msg-with-linear-ref.sh

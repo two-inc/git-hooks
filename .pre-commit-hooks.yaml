@@ -12,3 +12,10 @@
   language: script
   always_run: true
   stages: [commit-msg]
+- id: prepare-commit-msg-with-linear-ref
+  name: Prepare commit message with linear reference
+  description: "Prepare commit message by extracting linear reference"
+  entry: prepare-commit-msg-with-linear-ref.sh
+  language: script
+  always_run: true
+  stages: [prepare-commit-msg]
