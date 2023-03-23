@@ -9,7 +9,7 @@
 red=$(tput setaf 1)
 normal=$(tput sgr0)
 commit_msg=$(cat $1)
-linear_ref=$'(t|T)-[0-9]{4}'
+linear_ref=$'(t|T)-[0-9]{3,4}'
 conventional_commit_types=$'(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)'
 # skip on "Merge branch...", "Merge pull...", etc.
 skip_if=$'|Merge .+|Revert .+|Bump version .+'
