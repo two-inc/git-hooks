@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 import re
 import sys
-from subprocess import check_output
+import subprocess
 
 commit_msg_filepath = sys.argv[1]
 
 try:
-    branch = check_output(["git", "symbolic-ref", "--short", "HEAD"]).strip().decode()
-except Exception:
+    branch = subprocess.check_output(["git", "symbolic-ref", "--short", "HEAD"]).strip().decode()
+except subprocess.CalledProcessError:
     sys.exit(0)
 regex = "^(.*)\/(\w+-\d+)-(.*)"
 
