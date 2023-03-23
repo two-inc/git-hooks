@@ -17,5 +17,5 @@
   description: "Prepare commit message by extracting linear reference"
   entry: prepare-commit-msg-with-linear-ref.py
   language: python3.10
-  stages: [prepare-commit-msg]
   always_run: true
+  stages: [prepare-commit-msg]
