@@ -15,7 +15,7 @@
 - id: prepare-commit-msg-with-linear-ref
   name: prepare commit message with linear reference
   description: "Prepare commit message by extracting linear reference"
-  entry: python3 prepare-commit-msg-with-linear-ref.py
-  language: python
+  entry: prepare-commit-msg-with-linear-ref.py
+  language: python3.10
   stages: [prepare-commit-msg]
   always_run: true
