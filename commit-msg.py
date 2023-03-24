@@ -22,7 +22,7 @@ and a conventional commit type, e.g.
 
     T-5482/feat: Amazing new feature
 
-See https://github.com/two-inc/git-hooks/blob/23.03.24-1/README.md for more info."
+See https://github.com/two-inc/git-hooks/blob/23.03.24-3/README.md for more info."
 """
 
 if __name__ == "__main__":
