@@ -1,5 +1,5 @@
 [tool.bumpver]
-current_version = "23.03.24-1"
+current_version = "23.03.24-2"
 version_pattern = "0Y.0M.0D[-INC0]"
 commit_message = "Bump version {old_version} -> {new_version}"
 commit = true
