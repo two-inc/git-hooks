@@ -10,11 +10,9 @@
 import sys
 import re
 from common import commit_types_doc
-from common import commit_types
+from common import valid_commit_regex
 
 commit_msg = open(sys.argv[1], "r").read()
-linear_ref = "[t|T]-[0-9]{3,4}"
-regex = f"^{linear_ref}\/{commit_types}!?: |Merge .+|Revert .+|Bump version .+"
 error = f"""
 Commit message needs to be prefixed with a reference to a Linear issue
 and a conventional commit type, e.g. 'T-5482/feat: Amazing new feature'.
@@ -22,7 +20,7 @@ and a conventional commit type, e.g. 'T-5482/feat: Amazing new feature'.
 See https://github.com/two-inc/git-hooks/blob/23.03.23-6/README.md for more info."
 """
 
-if match := re.match(regex, commit_msg):
+if match := re.match(valid_commit_regex, commit_msg):
     print(
         "Commit message contains reference to Linear issue and conventional commit type."
     )
