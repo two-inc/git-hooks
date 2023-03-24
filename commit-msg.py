@@ -19,7 +19,7 @@ error = f"""
 Commit message needs to be prefixed with a reference to a Linear issue
 and a conventional commit type, e.g. 'T-5482/feat: Amazing new feature'.
 
-See https://github.com/two-inc/git-hooks/blob/23.03.23-6/README.md for more info."
+See https://github.com/two-inc/git-hooks/blob/23.03.24/README.md for more info."
 """
 
 if match := re.match(regex, commit_msg):
