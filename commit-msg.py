@@ -9,23 +9,26 @@
 
 import sys
 import re
-from common import commit_types_doc
+from common import commit_type_doc
 from common import valid_commit_regex
 
-commit_msg = open(sys.argv[1], "r").read()
-error = f"""
+ERRC = "\033[91m"
+ENDC = "\033[0m"
+
+success = "Commit message contains reference to Linear issue and conventional commit type."
+error = """
 Commit message needs to be prefixed with a reference to a Linear issue
-and a conventional commit type, e.g. 'T-5482/feat: Amazing new feature'.
+and a conventional commit type, e.g.
+
+    T-5482/feat: Amazing new feature
 
 See https://github.com/two-inc/git-hooks/blob/23.03.24-1/README.md for more info."
 """
 
-if match := re.match(valid_commit_regex, commit_msg):
-    print(
-        "Commit message contains reference to Linear issue and conventional commit type."
-    )
-else:
-    FAIL = "\033[91m"
-    ENDC = "\033[0m"
-    print(f"{FAIL}{error}{ENDC}{commit_types_doc}")
-    sys.exit(1)
+if __name__ == "__main__":
+    commit_msg = open(sys.argv[1], "r").read()
+    if match := re.match(valid_commit_regex, commit_msg):
+        print(success)
+    else:
+        print(f"{ERRC}{error}{ENDC}{commit_type_doc}")
+        sys.exit(1)
