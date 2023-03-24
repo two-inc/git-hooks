@@ -1,7 +1,16 @@
+default_install_hook_types: [commit-msg, prepare-commit-msg]
 repos:
-    - repo: local
-      hooks:
-          - name: conventional-commit-with-linear-ref
-            id: commit-type-with-linear-ref
-            language: system
-            entry: ./commit-type-with-linear-ref-in-msg.sh
+  - repo: local
+    hooks:
+      - name: commit-msg
+        id: commit-msg
+        language: system
+        entry: ./commit-msg.py
+        stages: [commit-msg]
+  - repo: local
+    hooks:
+      - name: prepare-commit-msg
+        id: prepare-commit-msg
+        language: python
+        entry: ./prepare-commit-msg.py
+        stages: [prepare-commit-msg]
