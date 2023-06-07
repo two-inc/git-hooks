@@ -7,15 +7,16 @@ from common import commit_type_regex
 from common import linear_ref
 from common import valid_commit_regex
 
-branch_regex = f"^(.*)\/({linear_ref})-(.*)"
-commit_msg_title_regex = f"^({commit_type_regex}!?): (.*)"
+branch_regex = f"^(.*)\/({linear_ref})[-|_](.*)"
+commit_msg_title_regex = f"^({commit_type_regex}!?):? (.*)"
+commit_msg_issue_regex = f"^({linear_ref})\/(.*)"
 issue_regex = f"^{linear_ref}$"
 prefix_regex = f"^({commit_type_regex})"
 editor_text = "# Please enter the commit message for your changes."
 
 # Convert branch name to commit message
 def branch_to_commit_msg(branch):
-    return branch.replace("-", " ").capitalize() + "\n"
+    return branch.replace("-", " ").replace("_", " ").capitalize() + "\n"
 
 # Check prefix for hints like hotfix/feat/etc:
 def prefix_to_commit_type(prefix):
@@ -49,7 +50,7 @@ if __name__ == "__main__":
         sys.exit(0)
 
     # Default values
-    issue = "T-???"
+    issue = "T-"
     commit_type = "fix"
     
     # If the branch has hints about linear reference, extract those
@@ -69,13 +70,18 @@ if __name__ == "__main__":
     if editor_text in raw_commit_msg:
         commit_msg_body = "\n".join(commit_msg_lines[1:] + [commented_commit_type_doc])
     
+    # If the commit message has linear ref, extract it from the commit message title
+    if commit_msg_match := re.match(commit_msg_issue_regex, commit_msg_title):
+        issue = commit_msg_match.group(1).capitalize()
+        commit_msg_title = commit_msg_match.group(2)
     # If the commit message only has conventional commit tag but no linear ref, use those
     if commit_msg_match := re.match(commit_msg_title_regex, commit_msg_title):
         commit_type = commit_msg_match.group(1)
-        commit_msg = commit_msg_match.group(2)
+        commit_msg = commit_msg_match.group(2).capitalize()
     
     # Write to commit message
-    message = f"{issue}/{commit_type}: {commit_msg}\n{commit_msg_body}"
+    message = f"{commit_msg}\n{commit_msg_body}"
+    message = f"{issue}/{commit_type}: {message}"
     with open(commit_msg_filepath, "w+") as fh:
         fh.seek(0, 0)
         fh.write(message)
