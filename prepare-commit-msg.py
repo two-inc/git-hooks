@@ -50,7 +50,7 @@ if __name__ == "__main__":
         sys.exit(0)
 
     # Default values
-    issue = "T-"
+    issue = ""
     commit_type = "fix"
     
     # If the branch has hints about linear reference, extract those
@@ -80,8 +80,9 @@ if __name__ == "__main__":
         commit_msg = commit_msg_match.group(2).capitalize()
     
     # Write to commit message
-    message = f"{commit_msg}\n{commit_msg_body}"
-    message = f"{issue}/{commit_type}: {message}"
+    message = f"{commit_type}: {commit_msg}\n{commit_msg_body}"
+    if issue:
+        message = f"{issue}/{message}"
     with open(commit_msg_filepath, "w+") as fh:
         fh.seek(0, 0)
         fh.write(message)
