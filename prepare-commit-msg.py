@@ -77,7 +77,7 @@ if __name__ == "__main__":
     # If the commit message only has conventional commit tag but no linear ref, use those
     if commit_msg_match := re.match(commit_msg_title_regex, commit_msg_title):
         commit_type = commit_msg_match.group(1)
-        commit_msg = commit_msg_match.group(2).capitalize()
+        commit_msg = commit_msg_match.group(2)
     
     # Write to commit message
     message = f"{commit_type}: {commit_msg}\n{commit_msg_body}"
