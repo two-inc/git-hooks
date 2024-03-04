@@ -19,5 +19,5 @@ Valid conventional commit types are:
 commented_commit_type_doc = commit_type_doc.replace("\n", "\n# ")
 
 commit_type_regex = "(?:build|chore|ci|docs|feat|fix|hotfix|perf|refactor|revert|style|test)"
-linear_ref = "(t|T|kna|KNA|C|c)-[0-9]{1,5}"
+linear_ref = "(t|T|kna|KNA|CET|cet)-[0-9]{1,5}"
 valid_commit_regex = f"^{linear_ref}\/{commit_type_regex}!?: |Merge .+|Revert .+|Bump version .+"
