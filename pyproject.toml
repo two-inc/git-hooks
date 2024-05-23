@@ -1,6 +1,6 @@
 [project]
 name = "git-hooks"
-version = "24.05.23-1"
+version = "24.05.23-2"
 
 [project.optional-dependencies]
 dev = [
@@ -9,7 +9,7 @@ dev = [
 ]
 
 [tool.bumpver]
-current_version = "24.05.23-1"
+current_version = "24.05.23-2"
 version_pattern = "0Y.0M.0D[-INC0]"
 commit_message = "Bump version {old_version} -> {new_version}"
 commit = true
