@@ -4,7 +4,7 @@ This repo contains custom git hooks we use at Two. To add a hook to a repo you h
 
 ## Add Hook To Repo
 
-First make sure you have installed pre-commit in your repo with `brew install pre-commit` and installed the relevant hooks with `pre-commit install --hook-type <type>`. See `stages` in [.pre-commit-hooks.yaml](.pre-commit-hooks.yaml) for relevant hook tpes. For more information on pre-commit usage, refer to [docs](https://pre-commit.com/#developing-hooks-interactively).
+First make sure you have installed pre-commit in your repo with `brew install pre-commit` and installed the relevant hooks with `pre-commit install --hook-type <type>`. See `stages` in [.pre-commit-hooks.yaml](.pre-commit-hooks.yaml) for relevant hook types. For more information on pre-commit usage, refer to [docs](https://pre-commit.com/#developing-hooks-interactively).
 
 ### Example Config
 
