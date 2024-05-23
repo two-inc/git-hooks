@@ -4,7 +4,7 @@ This repo contains custom git hooks we use at Two. To add a hook to a repo you h
 
 ## Add Hook To Repo
 
-First make sure you have installed pre-commit in your repo with `brew install pre-commit` and installed the relevant hooks with `pre-commit install --hook-type <type>`. See `stages` in [.pre-commit-hooks.yaml](.pre-commit-hooks.yaml) for relevant hook types. For more information on pre-commit usage, refer to [docs](https://pre-commit.com/#developing-hooks-interactively).
+First make sure you have installed pre-commit in your repo with `brew install pre-commit` and installed the relevant hooks with `pre-commit install --hook-type <type>`. See `stages` in [.pre-commit-hooks.yaml](.pre-commit-hooks.yaml) for relevant hook tpes. For more information on pre-commit usage, refer to [docs](https://pre-commit.com/#developing-hooks-interactively).
 
 ### Example Config
 
@@ -13,7 +13,7 @@ To only check for a reference to a Linear issue in your commit message, add this
 ```yaml
 # .pre-commit-config.yaml
 - repo: https://github.com/two-inc/git-hooks.git
-  rev: 24.05.07
+  rev: 24.05.23-1
     hooks:
       - id: linear-ref
 ```
@@ -23,7 +23,7 @@ To check for both a reference to a Linear issue as well as a conventional commit
 ```yaml
 # .pre-commit-config.yaml
 - repo: https://github.com/two-inc/git-hooks.git
-  rev: 24.05.07
+  rev: 24.05.23-1
     hooks:
       - id: commit-type-with-linear-ref
 ```
@@ -33,7 +33,7 @@ Alternatively, you can use ssh
 ```yaml
 # .pre-commit-config.yaml
 - repo: git@github.com:two-inc/git-hooks.git
-  rev: 24.05.07
+  rev: 24.05.23-1
     hooks:
       - id: commit-type-with-linear-ref
 ```
@@ -46,7 +46,7 @@ Alternatively, you can use ssh
 
 2. Install requirements:
 
-        pip3 install -r requirements.txt
+        pip3 install '.[dev]'
 
 ## Release Process (git-hooks repo)
 

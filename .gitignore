@@ -2,3 +2,8 @@
 .vscode/
 venv/
 __pycache__/
+build/
+git_hooks.egg-info/
+
+# files
+.DS_Store
