@@ -1,5 +1,15 @@
+[project]
+name = "git-hooks"
+version = "24.05.23-2"
+
+[project.optional-dependencies]
+dev = [
+  "bumpver==2022.1119",
+  "pytest==6.2.5",
+]
+
 [tool.bumpver]
-current_version = "24.05.07"
+current_version = "24.05.23-2"
 version_pattern = "0Y.0M.0D[-INC0]"
 commit_message = "Bump version {old_version} -> {new_version}"
 commit = true
@@ -8,7 +18,8 @@ push = false
 
 [tool.bumpver.file_patterns]
 "pyproject.toml" = [
-    'current_version = "{version}"',
+    '^version = "{version}"',
+    '^current_version = "{version}"',
 ]
 "README.md" = [
     'rev: {version}',

@@ -1,0 +1,21 @@
+name: Run test
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Determine which namespace to deploy to
+        shell: bash
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install '.[dev]'
+          pytest
