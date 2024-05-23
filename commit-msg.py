@@ -9,8 +9,7 @@
 
 import sys
 import re
-from common import commit_type_doc
-from common import valid_commit_regex
+import common
 
 ERRC = "\033[91m"
 ENDC = "\033[0m"
@@ -27,8 +26,8 @@ See https://github.com/two-inc/git-hooks/blob/24.05.07/README.md for more info."
 
 if __name__ == "__main__":
     commit_msg = open(sys.argv[1], "r").read()
-    if match := re.match(valid_commit_regex, commit_msg):
+    if match := re.match(common.valid_commit_regex, commit_msg):
         print(success)
     else:
-        print(f"{ERRC}{error}{ENDC}{commit_type_doc}")
+        print(f"{ERRC}{error}{ENDC}{common.commit_type_doc}")
         sys.exit(1)
