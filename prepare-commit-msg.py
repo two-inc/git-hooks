@@ -3,7 +3,8 @@
 import re
 import sys
 import subprocess
-import common
+
+from git_hooks import common
 
 editor_text = "# Please enter the commit message for your changes."
 

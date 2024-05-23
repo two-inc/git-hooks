@@ -9,7 +9,8 @@
 
 import sys
 import re
-import common
+
+from git_hooks import common
 
 ERRC = "\033[91m"
 ENDC = "\033[0m"

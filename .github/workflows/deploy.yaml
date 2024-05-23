@@ -15,5 +15,5 @@ jobs:
       - name: Determine which namespace to deploy to
         shell: bash
         run: |
-          pip install -r requirements.txt
+          pip install '.[dev]'
           pytest
