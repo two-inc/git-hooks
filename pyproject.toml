@@ -1,6 +1,6 @@
 [project]
 name = "git-hooks"
-version = "24.06.14"
+version = "24.06.14-1"
 dependencies = [
   "gql[aiohttp]==3.4.1",
 ]
@@ -12,7 +12,7 @@ dev = [
 ]
 
 [tool.bumpver]
-current_version = "24.06.14"
+current_version = "24.06.14-1"
 version_pattern = "0Y.0M.0D[-INC0]"
 commit_message = "Bump version {old_version} -> {new_version}"
 commit = true
