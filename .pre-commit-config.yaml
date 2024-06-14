@@ -4,13 +4,13 @@ repos:
     hooks:
       - name: commit-msg
         id: commit-msg
-        language: system
-        entry: ./commit-msg.py
+        language: python
+        entry: commit-msg
         stages: [commit-msg]
   - repo: local
     hooks:
       - name: prepare-commit-msg
         id: prepare-commit-msg
         language: python
-        entry: ./prepare-commit-msg.py
+        entry: prepare-commit-msg
         stages: [prepare-commit-msg]

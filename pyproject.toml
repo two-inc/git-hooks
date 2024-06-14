@@ -1,6 +1,9 @@
 [project]
 name = "git-hooks"
-version = "24.05.23-2"
+version = "24.06.14-1"
+dependencies = [
+  "gql[aiohttp]==3.4.1",
+]
 
 [project.optional-dependencies]
 dev = [
@@ -8,13 +11,17 @@ dev = [
   "pytest==6.2.5",
 ]
 
+[project.scripts]
+prepare-commit-msg = "git_hooks.prepare_commit_msg:main"
+commit-msg = "git_hooks.commit_msg:main"
+
 [tool.bumpver]
-current_version = "24.05.23-2"
+current_version = "24.06.14-1"
 version_pattern = "0Y.0M.0D[-INC0]"
 commit_message = "Bump version {old_version} -> {new_version}"
 commit = true
 tag = true
-push = false
+push = true
 
 [tool.bumpver.file_patterns]
 "pyproject.toml" = [
@@ -24,6 +31,6 @@ push = false
 "README.md" = [
     'rev: {version}',
 ]
-"commit-msg.py" = [
+"git_hooks/commit_msg.py" = [
     'two-inc/git-hooks/blob/{version}/README.md'
 ]
