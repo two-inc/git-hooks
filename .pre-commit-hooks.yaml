@@ -1,7 +1,7 @@
 - id: commit-msg
   name: Check conventional commit type and linear reference in commit message
   description: "Checks if commit message starts with linear reference and conventional commit type"
-  entry: commit-msg.py
+  entry: ./commit-msg.py
   language: python
   always_run: true
   stages: [commit-msg]
@@ -9,7 +9,7 @@
 - id: prepare-commit-msg
   name: Prepare commit message with conventional commit type and linear reference
   description: "Prepare commit message by extracting linear reference from branch name"
-  entry: prepare-commit-msg.py
+  entry: ./prepare-commit-msg.py
   language: python
   always_run: true
   stages: [prepare-commit-msg]
