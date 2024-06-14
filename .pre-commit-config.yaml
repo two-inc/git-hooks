@@ -4,13 +4,15 @@ repos:
     hooks:
       - name: commit-msg
         id: commit-msg
-        language: system
-        entry: ./commit-msg.py
+        language: python
+        entry: python commit-msg.py
         stages: [commit-msg]
+        additional_dependencies: ["gql[all]"]
   - repo: local
     hooks:
       - name: prepare-commit-msg
         id: prepare-commit-msg
         language: python
-        entry: ./prepare-commit-msg.py
+        entry: python prepare-commit-msg.py
         stages: [prepare-commit-msg]
+        additional_dependencies: ["gql[all]"]

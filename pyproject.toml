@@ -1,6 +1,9 @@
 [project]
 name = "git-hooks"
 version = "24.05.23-2"
+dependencies = [
+  "gql[aiohttp]==3.4.1",
+]
 
 [project.optional-dependencies]
 dev = [

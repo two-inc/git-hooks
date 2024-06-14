@@ -2,13 +2,15 @@
   name: Check conventional commit type and linear reference in commit message
   description: "Checks if commit message starts with linear reference and conventional commit type"
   entry: commit-msg.py
-  language: script
+  language: python
   always_run: true
   stages: [commit-msg]
+  additional_dependencies: ["gql[all]"]
 - id: prepare-commit-msg
   name: Prepare commit message with conventional commit type and linear reference
   description: "Prepare commit message by extracting linear reference from branch name"
   entry: prepare-commit-msg.py
-  language: script
+  language: python
   always_run: true
   stages: [prepare-commit-msg]
+  additional_dependencies: ["gql[all]"]

@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
+import os
 import re
 import sys
 import subprocess
+import gql
+from gql.transport.aiohttp import AIOHTTPTransport
 
 from git_hooks import common
 
@@ -29,10 +32,42 @@ def get_branch_name() -> str:
         sys.exit(0)
 
 
+def linear_client() -> gql.Client | None:
+    if (api_key := os.environ.get("LINEAR_API_KEY")):
+        transport = AIOHTTPTransport(
+            url="https://api.linear.app/graphql",
+            headers={"Authorization": api_key},
+        )
+        return gql.Client(transport=transport, fetch_schema_from_transport=True)
+
+
+def retrieve_linear_issue(issue: str) -> dict[str, str] | None:
+    if client := linear_client():
+        query = gql.gql(
+            """
+            query Issue ($issue: String!) {
+                issue(id: $issue) {
+                    title
+                    description
+                }
+            }
+            """
+        )
+        values = {
+            "issue": issue
+        }
+        response = client.execute(query, variable_values=values)
+        return {
+            "title" : response["issue"]["title"].strip(),
+            "description" : response["issue"]["description"].strip()
+        }
+
+
 def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
     # Default values
     issue = ""
     commit_type = "fix"
+    commit_msg = ""
 
     # If the branch has hints about linear reference, extract those
     if branch_regex_match := re.match(common.branch_regex, branch):
@@ -43,13 +78,14 @@ def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
     else:
         commit_msg = branch_to_commit_msg(branch)
 
+    commit_msg = commit_msg.strip()
     commit_msg_lines = raw_commit_msg.splitlines()
     commit_msg_title = commit_msg_lines[0]
 
     # Only append to commit message body 
     commit_msg_body = ""
     if editor_text in raw_commit_msg:
-        commit_msg_body = "\n".join(commit_msg_lines[1:] + [common.commented_commit_type_doc])
+        commit_msg_body = "\n".join(commit_msg_lines[1:]).strip()
 
     # If the commit message has linear ref, extract it from the commit message title
     if commit_msg_match := re.match(common.commit_msg_issue_regex, commit_msg_title):
@@ -58,10 +94,16 @@ def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
     # If the commit message only has conventional commit tag but no linear ref, use those
     if commit_msg_match := re.match(common.commit_msg_title_regex, commit_msg_title):
         commit_type = commit_msg_match.group(1)
-        commit_msg = commit_msg_match.group(2)
+        commit_msg = commit_msg_match.group(2).strip()
+
+    # If the commit message has linear ref, extract it from the commit message title
+    if issue and (linear_issue := retrieve_linear_issue(issue)):
+        commit_msg = linear_issue["title"] or commit_msg
+        commit_msg_body = linear_issue["description"] + "\n\n" + commit_msg_body
 
     # Write to commit message
-    message = f"{commit_type}: {commit_msg}\n{commit_msg_body}"
+    commented_body = "\n".join([common.commented_commit_type_doc])
+    message = f"{commit_type}: {commit_msg}\n\n{commit_msg_body}{commented_body}"
     if issue:
         message = f"{issue}/{message}"
 
