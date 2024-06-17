@@ -16,7 +16,7 @@ commit_types = [
 
 commit_type_doc = """Valid conventional commit types are:
 
-\t""" + "\n\t".join(commit_types)
+\t""" + "\n\t".join(commit_types) + "\n"
 
 commented_commit_type_doc = "# " + commit_type_doc.replace("\n", "\n#")
 
