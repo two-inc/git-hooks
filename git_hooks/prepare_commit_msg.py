@@ -57,9 +57,11 @@ def retrieve_linear_issue(issue: str) -> dict[str, str]:
     )
     values = {"issue": issue}
     response = client.execute(query, variable_values=values)
+    title = response["issue"]["title"]
+    description = response["issue"]["description"]
     return {
-        "title": response["issue"]["title"].strip(),
-        "description": response["issue"]["description"].strip() + "\n\n",
+        "title": title.strip() if title else "",
+        "description": description.strip() + "\n\n" if description else "",
     }
 
 
