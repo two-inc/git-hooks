@@ -92,6 +92,7 @@ def extract_branch_data(branch: str) -> dict[str, str]:
         "commit_msg_title": commit_msg_title,
     }
 
+
 def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
     # Default values
     branch_data = extract_branch_data(branch)
@@ -101,7 +102,9 @@ def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
     commit_msg_body = ""
     commit_msg_lines = raw_commit_msg.strip().splitlines()
     if EDITOR_TEXT in raw_commit_msg:
-        commit_msg_body = "\n".join(commit_msg_lines[1:] + [common.commented_commit_type_doc])
+        commit_msg_body = "\n".join(
+            commit_msg_lines[1:] + [common.commented_commit_type_doc]
+        )
 
         # If LINEAR_API_KEY is set and issue number is not empty, fetch issue details
         if LINEAR_API_KEY and issue:
@@ -110,7 +113,10 @@ def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
                 commit_msg_title = linear_issue["title"] or commit_msg_title
                 commit_msg_body = linear_issue["description"] + commit_msg_body
             except Exception as exception:
-                error_details = ["# Error while fetching issue details from Linear:", "#"]
+                error_details = [
+                    "# Error while fetching issue details from Linear:",
+                    "#",
+                ]
                 if hasattr(exception, "errors") and isinstance(exception.errors, list):
                     error_details += [f"#\t{e['message']}" for e in exception.errors]
                 else:
@@ -129,7 +135,9 @@ def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
             commit_msg_body += "\n" + "\n".join(linear_info)
     else:
         commit_msg_title = commit_msg_lines[0] if len(commit_msg_lines) > 0 else ""
-        commit_msg_body = "\n".join(line for line in commit_msg_lines[1:] if not line.startswith("#"))
+        commit_msg_body = "\n".join(
+            line for line in commit_msg_lines[1:] if not line.startswith("#")
+        )
 
     # Write to commit message
     message = commit_msg_title
