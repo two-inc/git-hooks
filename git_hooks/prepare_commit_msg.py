@@ -99,7 +99,7 @@ def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
     commit_type = branch_data["commit_type"]
     commit_msg_title = branch_data["commit_msg_title"]
     commit_msg_body = ""
-    commit_msg_lines = raw_commit_msg.splitlines()
+    commit_msg_lines = raw_commit_msg.strip().splitlines()
     if EDITOR_TEXT in raw_commit_msg:
         commit_msg_body = "\n".join(commit_msg_lines[1:] + [common.commented_commit_type_doc])
 
@@ -132,7 +132,11 @@ def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
         commit_msg_body = "\n".join(line for line in commit_msg_lines[1:] if not line.startswith("#"))
 
     # Write to commit message
-    message = f"{commit_type}: {commit_msg_title}\n\n{commit_msg_body}"
+    message = commit_msg_title
+    if commit_msg_body:
+        message = f"{message}\n\n{commit_msg_body}"
+    if commit_type:
+        message = f"{commit_type}: {message}"
     if issue:
         message = f"{issue}/{message}"
 
