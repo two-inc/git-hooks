@@ -119,7 +119,7 @@ def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
                 commit_msg_body += "\n" + "\n".join(error_details)
         else:
             linear_info = [
-                "# Cannot fetch issue details from Linear with API key:",
+                "# Fetching issue details from Linear using API key:",
                 "#",
                 "#\tTo populate commit message with title and description for an issue number detected",
                 "#\tin the branch name, ensure that the environment variable LINEAR_API_KEY is set.",

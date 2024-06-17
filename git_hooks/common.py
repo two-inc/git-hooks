@@ -1,21 +1,24 @@
-commit_type_doc = """
- Valid conventional commit types are:
+commit_types = [
+    "build    updating build configuration, development tools",
+    "chore    updating grunt tasks etc.",
+    "ci       updating deployment configuration",
+    "docs     changes to documentation",
+    "fix      patching a bug in the codebase",
+    "feat     adding a new feature to the code",
+    "feat!    adding a new feature that introduces breaking API change",
+    "hotfix   updating a bug in production",
+    "perf     updating code to make performance enhancements",
+    "refactor updating code without any functional change",
+    "revert   updating code to earlier change",
+    "style    formatting changes, missing semicolons, etc.",
+    "test     for adding missing tests, refactoring tests; no production code change",
+]
 
-\tbuild    updating build configuration, development tools
-\tchore    updating grunt tasks etc. @
-\tci       updating deployment configuration
-\tdocs     changes to documentation
-\tfix      patching a bug in the codebase
-\tfeat     adding a new feature to the code
-\tfeat!    adding a new feature that introduces breaking API change
-\thotfix   updating a bug in production
-\tperf     updating code to make performance enhancements
-\trefactor updating code without any functional change
-\trevert   updating code to earlier change
-\tstyle    formatting changes, missing semicolons, etc.
-\ttest     for adding missing tests, refactoring tests; no production code change"""
+commit_type_doc = """Valid conventional commit types are:
 
-commented_commit_type_doc = commit_type_doc.replace("\n", "\n#")
+\t""" + "\n\t".join(commit_types) + "\n"
+
+commented_commit_type_doc = "# " + commit_type_doc.replace("\n", "\n#")
 
 commit_type_regex = (
     "(?:build|chore|ci|docs|feat|fix|hotfix|perf|refactor|revert|style|test)"
