@@ -100,7 +100,7 @@ def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
     commit_msg_title = branch_data["commit_msg_title"]
     commit_msg_body = ""
     commit_msg_lines = raw_commit_msg.splitlines()
-    if EDITOR_TEXT in commit_msg_lines:
+    if EDITOR_TEXT in raw_commit_msg:
         commit_msg_body = "\n".join(commit_msg_lines[1:] + [common.commented_commit_type_doc])
 
         # If LINEAR_API_KEY is set and issue number is not empty, fetch issue details
