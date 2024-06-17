@@ -23,7 +23,7 @@ and a conventional commit type, e.g.
 
     T-5482/feat: Amazing new feature
 
-See https://github.com/two-inc/git-hooks/blob/24.06.17-3/README.md for more info."
+See https://github.com/two-inc/git-hooks/blob/24.06.17-4/README.md for more info."
 """
 
 
