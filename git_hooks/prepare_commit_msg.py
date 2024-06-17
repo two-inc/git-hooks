@@ -3,7 +3,7 @@ import re
 import sys
 import subprocess
 import gql
-from gql.transport.aiohttp import AIOHTTPTransport
+from gql.transport.requests import RequestsHTTPTransport
 
 from git_hooks import common
 
@@ -36,7 +36,7 @@ def get_branch_name() -> str:
 
 
 def linear_client() -> gql.Client:
-    transport = AIOHTTPTransport(
+    transport = RequestsHTTPTransport(
         url="https://api.linear.app/graphql",
         headers={"Authorization": LINEAR_API_KEY},
     )
