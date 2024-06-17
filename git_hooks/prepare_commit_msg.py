@@ -7,7 +7,7 @@ from gql.transport.aiohttp import AIOHTTPTransport
 
 from git_hooks import common
 
-editor_text = "# Please enter the commit message for your changes."
+EDITOR_TEXT = "# Please enter the commit message for your changes."
 
 LINEAR_API_KEY = os.environ.get("LINEAR_API_KEY")
 
@@ -61,33 +61,22 @@ def retrieve_linear_issue(issue: str) -> dict[str, str]:
     description = response["issue"]["description"]
     return {
         "title": title.strip() if title else "",
-        "description": description.strip() + "\n\n" if description else "",
+        "description": f"{description.strip()}\n\n" if description else "",
     }
 
 
-def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
-    # Default values
+def extract_branch_data(branch: str) -> dict[str, str]:
     issue = ""
     commit_type = "fix"
-    commit_msg = ""
-
+    commit_msg_title = ""
     # If the branch has hints about linear reference, extract those
     if branch_regex_match := re.match(common.branch_regex, branch):
         prefix = branch_regex_match.group(1).lower()
         commit_type = prefix_to_commit_type(prefix) or commit_type
         issue = branch_regex_match.group(2).upper()
-        commit_msg = branch_to_commit_msg(branch_regex_match.group(3))
+        commit_msg_title = branch_to_commit_msg(branch_regex_match.group(3))
     else:
-        commit_msg = branch_to_commit_msg(branch)
-
-    commit_msg_lines = raw_commit_msg.splitlines()
-    commit_msg_title = commit_msg_lines[0]
-
-    # Only append to commit message body
-    commit_msg_body = ""
-    if editor_text in raw_commit_msg:
-        commit_msg_body = "\n".join(commit_msg_lines[1:])
-
+        commit_msg_title = branch_to_commit_msg(branch)
     # If the commit message has linear ref, extract it from the commit message title
     if commit_msg_match := re.match(common.commit_msg_issue_regex, commit_msg_title):
         issue = commit_msg_match.group(1).capitalize()
@@ -95,37 +84,55 @@ def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
     # If the commit message only has conventional commit tag but no linear ref, use those
     if commit_msg_match := re.match(common.commit_msg_title_regex, commit_msg_title):
         commit_type = commit_msg_match.group(1)
-        commit_msg = commit_msg_match.group(2)
+        commit_msg_title = commit_msg_match.group(2)
 
-    # If LINEAR_API_KEY is set and issue number is not empty, fetch issue details
-    if LINEAR_API_KEY and issue:
-        try:
-            linear_issue = retrieve_linear_issue(issue)
-            commit_msg = linear_issue["title"] or commit_msg
-            commit_msg_body = linear_issue["description"] + commit_msg_body
-        except Exception as exception:
-            error_details = ["# Error while fetching issue details from Linear:", "#"]
-            if hasattr(exception, "errors") and isinstance(exception.errors, list):
-                error_details += [f"#\t{e['message']}" for e in exception.errors]
-            else:
-                error_details += [f"#\t{str(exception)}"]
-            error_details += ["#"]
+    return {
+        "issue": issue,
+        "commit_type": commit_type,
+        "commit_msg_title": commit_msg_title,
+    }
 
-            commit_msg_body += "\n" + "\n".join(error_details)
+def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
+    # Default values
+    branch_data = extract_branch_data(branch)
+    issue = branch_data["issue"]
+    commit_type = branch_data["commit_type"]
+    commit_msg_title = branch_data["commit_msg_title"]
+    commit_msg_body = ""
+    commit_msg_lines = raw_commit_msg.splitlines()
+    if EDITOR_TEXT in commit_msg_lines:
+        commit_msg_body = "\n".join(commit_msg_lines[1:] + [common.commented_commit_type_doc])
+
+        # If LINEAR_API_KEY is set and issue number is not empty, fetch issue details
+        if LINEAR_API_KEY and issue:
+            try:
+                linear_issue = retrieve_linear_issue(issue)
+                commit_msg_title = linear_issue["title"] or commit_msg_title
+                commit_msg_body = linear_issue["description"] + commit_msg_body
+            except Exception as exception:
+                error_details = ["# Error while fetching issue details from Linear:", "#"]
+                if hasattr(exception, "errors") and isinstance(exception.errors, list):
+                    error_details += [f"#\t{e['message']}" for e in exception.errors]
+                else:
+                    error_details += [f"#\t{str(exception)}"]
+                error_details += ["#"]
+                commit_msg_body += "\n" + "\n".join(error_details)
+        else:
+            linear_info = [
+                "# Cannot fetch issue details from Linear with API key:",
+                "#",
+                "#\tTo populate commit message with title and description for an issue number detected",
+                "#\tin the branch name, ensure that the environment variable LINEAR_API_KEY is set.",
+                "#\tGet this from Personal API keys section at linear.app/tillit/settings/api.",
+                "#",
+            ]
+            commit_msg_body += "\n" + "\n".join(linear_info)
     else:
-        linear_info = [
-            "# Cannot fetch issue details from Linear with API key:",
-            "#",
-            "#\tTo populate commit message with title and description for an issue number detected",
-            "#\tin the branch name, ensure that the environment variable LINEAR_API_KEY is set.",
-            "#\tGet this from Personal API keys section at linear.app/tillit/settings/api.",
-            "#",
-        ]
-        commit_msg_body += "\n" + "\n".join(linear_info)
+        commit_msg_title = commit_msg_lines[0] if len(commit_msg_lines) > 0 else ""
+        commit_msg_body = "\n".join(line for line in commit_msg_lines[1:] if not line.startswith("#"))
 
     # Write to commit message
-    commented_body = "\n".join([common.commented_commit_type_doc])
-    message = f"{commit_type}: {commit_msg}\n\n{commit_msg_body}{commented_body}"
+    message = f"{commit_type}: {commit_msg_title}\n\n{commit_msg_body}"
     if issue:
         message = f"{issue}/{message}"
 
