@@ -18,9 +18,10 @@ def branch_to_commit_msg(branch: str) -> str:
 
 
 # Check prefix for hints like hotfix/feat/etc:
-def prefix_to_commit_type(prefix: str) -> str | None:
+def prefix_to_commit_type(prefix: str) -> str:
     if prefix_match := re.match(common.prefix_regex, prefix):
         return prefix_match.group(1)
+    return "fix"
 
 
 def get_branch_name() -> str:
@@ -65,18 +66,9 @@ def retrieve_linear_issue(issue: str) -> dict[str, str]:
     }
 
 
-def extract_branch_data(branch: str) -> dict[str, str]:
+def extract_commit_msg_title_data(commit_msg_title: str) -> dict[str, str]:
     issue = ""
-    commit_type = "fix"
-    commit_msg_title = ""
-    # If the branch has hints about linear reference, extract those
-    if branch_regex_match := re.match(common.branch_regex, branch):
-        prefix = branch_regex_match.group(1).lower()
-        commit_type = prefix_to_commit_type(prefix) or commit_type
-        issue = branch_regex_match.group(2).upper()
-        commit_msg_title = branch_to_commit_msg(branch_regex_match.group(3))
-    else:
-        commit_msg_title = branch_to_commit_msg(branch)
+    commit_type = ""
     # If the commit message has linear ref, extract it from the commit message title
     if commit_msg_match := re.match(common.commit_msg_issue_regex, commit_msg_title):
         issue = commit_msg_match.group(1).capitalize()
@@ -85,6 +77,24 @@ def extract_branch_data(branch: str) -> dict[str, str]:
     if commit_msg_match := re.match(common.commit_msg_title_regex, commit_msg_title):
         commit_type = commit_msg_match.group(1)
         commit_msg_title = commit_msg_match.group(2)
+    return {
+        "issue": issue,
+        "commit_type": commit_type,
+        "commit_msg_title": commit_msg_title,
+    }
+
+
+def extract_branch_data(branch: str) -> dict[str, str]:
+    issue = ""
+    commit_type = ""
+    # If the branch has hints about linear reference, extract those
+    if branch_regex_match := re.match(common.branch_regex, branch):
+        prefix = branch_regex_match.group(1).lower()
+        commit_type = prefix_to_commit_type(prefix)
+        issue = branch_regex_match.group(2).upper()
+        commit_msg_title = branch_to_commit_msg(branch_regex_match.group(3))
+    else:
+        commit_msg_title = branch_to_commit_msg(branch)
 
     return {
         "issue": issue,
@@ -94,18 +104,15 @@ def extract_branch_data(branch: str) -> dict[str, str]:
 
 
 def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
-    # Default values
-    branch_data = extract_branch_data(branch)
-    issue = branch_data["issue"]
-    commit_type = branch_data["commit_type"]
-    commit_msg_title = branch_data["commit_msg_title"]
-    commit_msg_body = ""
     commit_msg_lines = raw_commit_msg.strip().splitlines()
+    branch_data = extract_branch_data(branch)
+    commit_msg_title_data = extract_commit_msg_title_data(commit_msg_lines[0] if len(commit_msg_lines) > 0 else "")
+    issue = commit_msg_title_data["issue"] or branch_data["issue"]
+    commit_type = commit_msg_title_data["commit_type"] or branch_data["commit_type"]
+    commit_msg_title = commit_msg_title_data["commit_msg_title"] or branch_data["commit_msg_title"]
+    commit_msg_body = "\n".join(commit_msg_lines[1:])
     if EDITOR_TEXT in raw_commit_msg:
-        commit_msg_body = "\n".join(
-            commit_msg_lines[1:] + [common.commented_commit_type_doc]
-        )
-
+        commit_msg_body += f"\n{common.commented_commit_type_doc}"
         # If LINEAR_API_KEY is set and issue number is not empty, fetch issue details
         if LINEAR_API_KEY and issue:
             try:
@@ -133,11 +140,6 @@ def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
                 "#",
             ]
             commit_msg_body += "\n" + "\n".join(linear_info)
-    else:
-        commit_msg_title = commit_msg_lines[0] if len(commit_msg_lines) > 0 else ""
-        commit_msg_body = "\n".join(
-            line for line in commit_msg_lines[1:] if not line.startswith("#")
-        )
 
     # Write to commit message
     message = commit_msg_title
