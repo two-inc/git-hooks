@@ -14,9 +14,13 @@ commit_types = [
     "test     for adding missing tests, refactoring tests; no production code change",
 ]
 
-commit_type_doc = """Valid conventional commit types are:
+commit_type_doc = (
+    """Valid conventional commit types are:
 
-\t""" + "\n\t".join(commit_types) + "\n"
+\t"""
+    + "\n\t".join(commit_types)
+    + "\n"
+)
 
 commented_commit_type_doc = "# " + commit_type_doc.replace("\n", "\n#")
 
@@ -27,7 +31,8 @@ linear_ref = "(?:t|T|kna|KNA|cet|CET|nor|NOR|l2|L2)-[0-9]{1,5}"
 valid_commit_regex = (
     f"^{linear_ref}/{commit_type_regex}!?: |Merge .+|Revert .+|Bump version .+"
 )
-branch_regex = f"^(.*)/({linear_ref})[-|_](.*)"
+partial_branch_regex = f"({linear_ref})[-|_](.*)"
+branch_regex = f"^(.*)/{partial_branch_regex}"
 commit_msg_title_regex = f"^({commit_type_regex}!?):? (.*)"
 commit_msg_issue_regex = f"^({linear_ref})/(.*)"
 issue_regex = f"^{linear_ref}$"

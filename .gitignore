@@ -7,3 +7,4 @@ git_hooks.egg-info/
 
 # files
 .DS_Store
+.coverage

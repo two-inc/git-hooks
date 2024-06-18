@@ -17,24 +17,27 @@ ENDC = "\033[0m"
 success = (
     "Commit message contains reference to Linear issue and conventional commit type."
 )
-error = """
+error = f"""{ERRC}
 Commit message needs to be prefixed with a reference to a Linear issue
 and a conventional commit type, e.g.
 
     T-5482/feat: Amazing new feature
 
 See https://github.com/two-inc/git-hooks/blob/24.06.17-6/README.md for more info.
-
+{ENDC}
+{common.commit_type_doc}
 """
+
+
+def get_exit_code(commit_msg) -> int:
+    return 0 if re.match(common.valid_commit_regex, commit_msg) else 1
 
 
 def main():
     commit_msg = open(sys.argv[1], "r").read()
-    if match := re.match(common.valid_commit_regex, commit_msg):
-        print(success)
-    else:
-        print(f"{ERRC}{error}{ENDC}{common.commit_type_doc}")
-        sys.exit(1)
+    exit_code = get_exit_code(commit_msg)
+    print(success if exit_code == 0 else error, file=sys.stderr)
+    sys.exit(exit_code)
 
 
 if __name__ == "__main__":

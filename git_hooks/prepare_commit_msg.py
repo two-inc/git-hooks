@@ -14,7 +14,7 @@ LINEAR_API_KEY = os.environ.get("LINEAR_API_KEY")
 
 # Convert branch name to commit message
 def branch_to_commit_msg(branch: str) -> str:
-    return branch.replace("-", " ").replace("_", " ").capitalize() + "\n"
+    return branch.replace("-", " ").replace("_", " ").capitalize()
 
 
 # Check prefix for hints like hotfix/feat/etc:
@@ -24,7 +24,7 @@ def prefix_to_commit_type(prefix: str) -> str:
     return "fix"
 
 
-def get_branch_name() -> str:
+def get_branch_name() -> str | None:
     try:
         return (
             subprocess.check_output(["git", "symbolic-ref", "--short", "HEAD"])
@@ -33,7 +33,7 @@ def get_branch_name() -> str:
         )
     except subprocess.CalledProcessError:
         # If branch name cannot be determined, there is nothing else to do
-        sys.exit(0)
+        pass
 
 
 def linear_client() -> gql.Client:
@@ -71,7 +71,7 @@ def extract_commit_msg_title_data(commit_msg_title: str) -> dict[str, str]:
     commit_type = ""
     # If the commit message has linear ref, extract it from the commit message title
     if commit_msg_match := re.match(common.commit_msg_issue_regex, commit_msg_title):
-        issue = commit_msg_match.group(1).capitalize()
+        issue = commit_msg_match.group(1).upper()
         commit_msg_title = commit_msg_match.group(2)
     # If the commit message only has conventional commit tag but no linear ref, use those
     if commit_msg_match := re.match(common.commit_msg_title_regex, commit_msg_title):
@@ -87,14 +87,18 @@ def extract_commit_msg_title_data(commit_msg_title: str) -> dict[str, str]:
 def extract_branch_data(branch: str) -> dict[str, str]:
     issue = ""
     commit_type = ""
+    commit_msg_title = ""
+    _branch = branch
     # If the branch has hints about linear reference, extract those
     if branch_regex_match := re.match(common.branch_regex, branch):
         prefix = branch_regex_match.group(1).lower()
         commit_type = prefix_to_commit_type(prefix)
         issue = branch_regex_match.group(2).upper()
-        commit_msg_title = branch_to_commit_msg(branch_regex_match.group(3))
-    else:
-        commit_msg_title = branch_to_commit_msg(branch)
+        _branch = branch_regex_match.group(3)
+    elif partial_branch_regex_match := re.match(common.partial_branch_regex, branch):
+        issue = partial_branch_regex_match.group(1).upper()
+        _branch = partial_branch_regex_match.group(2)
+    commit_msg_title = branch_to_commit_msg(_branch)
 
     return {
         "issue": issue,
@@ -106,10 +110,14 @@ def extract_branch_data(branch: str) -> dict[str, str]:
 def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
     commit_msg_lines = raw_commit_msg.strip().splitlines()
     branch_data = extract_branch_data(branch)
-    commit_msg_title_data = extract_commit_msg_title_data(commit_msg_lines[0] if len(commit_msg_lines) > 0 else "")
+    commit_msg_title_data = extract_commit_msg_title_data(
+        commit_msg_lines[0] if len(commit_msg_lines) > 0 else ""
+    )
     issue = commit_msg_title_data["issue"] or branch_data["issue"]
     commit_type = commit_msg_title_data["commit_type"] or branch_data["commit_type"]
-    commit_msg_title = commit_msg_title_data["commit_msg_title"] or branch_data["commit_msg_title"]
+    commit_msg_title = (
+        commit_msg_title_data["commit_msg_title"] or branch_data["commit_msg_title"]
+    )
     commit_msg_body = "\n".join(commit_msg_lines[1:])
     if EDITOR_TEXT in raw_commit_msg:
         commit_msg_body += f"\n{common.commented_commit_type_doc}"
@@ -156,14 +164,15 @@ def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
 def main():
     # Commit message filepath is always the first argument
     commit_msg_filepath = sys.argv[1]
-    branch = get_branch_name()
+    if (branch := get_branch_name()) is None:
+        return
 
     # Read raw commit message
     raw_commit_msg = open(commit_msg_filepath).read()
 
     # Commit message is already valid, nothing else to do
     if re.match(common.valid_commit_regex, raw_commit_msg):
-        sys.exit(0)
+        return
 
     message = prepare_commit_msg(raw_commit_msg, branch)
 
