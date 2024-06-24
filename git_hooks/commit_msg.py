@@ -1,9 +1,7 @@
-""" This hook verifies that the commit message contains a reference to a Linear issue
-    as well as a conventional commit type at the start
-    The commit message needs to conform to
-    <Linear issue>/<conventional commit type>[!]: <description>
-    e.g. T-5482/feat: Amazing new commit-msg hook
-    See https://www.conventionalcommits.org for details on conventional commits
+"""This hook verifies that the commit message contains a reference to a Linear issue as well as a conventional commit type.
+The commit message needs to conform to <linear issue>/<conventional commit type>[!]: <title>. e.g.
+    T-5482/feat: Amazing new commit-msg hook
+See https://www.conventionalcommits.org for examples of conventional commit types.
 """
 
 import sys
