@@ -1,3 +1,9 @@
+"""This hook prepares a commit message containing a reference to a Linear issue as well as a conventional commit type.
+It uses the branch name to determine the issue number and the commit message title as well as the conventional commit type.
+If LINEAR_API_KEY is set, it fetches the issue title and description from Linear and populates the commit message with it.
+See https://www.conventionalcommits.org for examples of conventional commit types.
+"""
+
 import os
 import re
 import sys
@@ -107,47 +113,70 @@ def extract_branch_data(branch: str) -> dict[str, str]:
     }
 
 
+def retrieve_linear_data(issue: str, edit_mode: bool) -> dict[str, str]:
+    # If LINEAR_API_KEY is set and issue number is not empty, fetch issue details
+    if LINEAR_API_KEY:
+        try:
+            linear_issue = retrieve_linear_issue(issue)
+            return {
+                "commit_msg_title": linear_issue["title"],
+                "commit_msg_body": linear_issue["description"],
+            }
+        except Exception as exception:
+            if not edit_mode:
+                return {}
+            error_details = [
+                "# Error fetching issue details from Linear:",
+                "#",
+            ]
+            if hasattr(exception, "errors") and isinstance(exception.errors, list):
+                error_details += [f"#\t{e['message']}" for e in exception.errors]
+            else:
+                error_details += [f"#\t{str(exception)}"]
+            error_details += ["#"]
+            return {
+                "commit_msg_body": "\n".join(error_details),
+            }
+    else:
+        if not edit_mode:
+            return {}
+        linear_info = [
+            "# NEW FEATURE: Use Linear API key to fetch commit title and description:",
+            "#",
+            "#\tTo populate commit message with title and description for an issue number detected",
+            "#\tin the branch name, ensure that the environment variable LINEAR_API_KEY is set.",
+            "#\tGet this from Personal API keys section at linear.app/tillit/settings/api.",
+            "#",
+        ]
+        return {
+            "commit_msg_body": "\n".join(linear_info),
+        }
+
+
 def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
-    commit_msg_lines = raw_commit_msg.strip().splitlines()
+    commit_msg_lines = raw_commit_msg.splitlines()
+    edit_mode = EDITOR_TEXT in raw_commit_msg
     branch_data = extract_branch_data(branch)
+    raw_commit_msg_title = commit_msg_lines[0] if len(commit_msg_lines) > 0 else ""
+
+    linear_data = {}
+    if (issue := branch_data["issue"]) and not raw_commit_msg_title:
+        linear_data = retrieve_linear_data(issue, edit_mode)
+
     commit_msg_title_data = extract_commit_msg_title_data(
-        commit_msg_lines[0] if len(commit_msg_lines) > 0 else ""
+        linear_data.get("commit_msg_title") or raw_commit_msg_title
     )
-    issue = commit_msg_title_data["issue"] or branch_data["issue"]
     commit_type = commit_msg_title_data["commit_type"] or branch_data["commit_type"]
     commit_msg_title = (
         commit_msg_title_data["commit_msg_title"] or branch_data["commit_msg_title"]
     )
-    commit_msg_body = "\n".join(commit_msg_lines[1:])
-    if EDITOR_TEXT in raw_commit_msg:
-        commit_msg_body += f"\n{common.commented_commit_type_doc}"
-        # If LINEAR_API_KEY is set and issue number is not empty, fetch issue details
-        if LINEAR_API_KEY and issue:
-            try:
-                linear_issue = retrieve_linear_issue(issue)
-                commit_msg_title = linear_issue["title"] or commit_msg_title
-                commit_msg_body = linear_issue["description"] + commit_msg_body
-            except Exception as exception:
-                error_details = [
-                    "# Error while fetching issue details from Linear:",
-                    "#",
-                ]
-                if hasattr(exception, "errors") and isinstance(exception.errors, list):
-                    error_details += [f"#\t{e['message']}" for e in exception.errors]
-                else:
-                    error_details += [f"#\t{str(exception)}"]
-                error_details += ["#"]
-                commit_msg_body += "\n" + "\n".join(error_details)
-        else:
-            linear_info = [
-                "# Fetching issue details from Linear using API key:",
-                "#",
-                "#\tTo populate commit message with title and description for an issue number detected",
-                "#\tin the branch name, ensure that the environment variable LINEAR_API_KEY is set.",
-                "#\tGet this from Personal API keys section at linear.app/tillit/settings/api.",
-                "#",
-            ]
-            commit_msg_body += "\n" + "\n".join(linear_info)
+    commit_type_lines = [common.commented_commit_type_doc] if edit_mode else []
+    linear_commit_msg_lines = (
+        [linear_data["commit_msg_body"]] if linear_data.get("commit_msg_body") else []
+    )
+    commit_msg_body = "\n".join(
+        linear_commit_msg_lines + commit_msg_lines[1:] + commit_type_lines
+    )
 
     # Write to commit message
     message = commit_msg_title

@@ -1,3 +1,7 @@
+# direnv
+.envrc
+.direnv/
+
 # folders
 .vscode/
 venv/
