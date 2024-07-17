@@ -26,6 +26,7 @@ def test_commit_type_regex(commit_type: str):
         "CET-1234",
         "NOR-1234",
         "L2-1234",
+        "DEL-14",
     ],
 )
 def test_linear_ref(issue: str):
@@ -41,6 +42,7 @@ def test_linear_ref(issue: str):
         "CET-1234/docs: ",
         "NOR-1234/style: ",
         "L2-1234/test: ",
+        "DEL-14/refactor: "
     ],
 )
 def test_valid_commit_regex(commit: str):
@@ -55,6 +57,7 @@ def test_valid_commit_regex(commit: str):
         "feat/CET-1234-fix-something",
         "bharat/L2-1234-add-something",
         "brtkwr/cet-281-fix-company-search-gb-bucket-permission",
+        "shelmig/del-13-update-credentials",
     ],
 )
 def test_branch_regex(branch: str):
@@ -89,6 +92,7 @@ def test_commit_msg_title_regex(commit_msg: str):
         "NOR-1234/docs: add something",
         "L2-1234/style add something",
         "T-1234/test: add something",
+        "DEL-1234/test: add something",
     ],
 )
 def test_commit_msg_issue_regex(commit_msg: str):
@@ -105,6 +109,7 @@ def test_commit_msg_issue_regex(commit_msg: str):
         "CET-1234",
         "NOR-1234",
         "L2-1234",
+        "DEL-1234",
     ],
 )
 def test_issue_regex(issue: str):
@@ -114,10 +119,16 @@ def test_issue_regex(issue: str):
 @pytest.mark.parametrize(
     "prefix",
     [
+        "build",
+        "chore",
+        "ci",
+        "docs",
         "feat",
         "fix",
         "hotfix",
-        "docs",
+        "perf",
+        "refactor",
+        "revert",
         "style",
         "test",
     ],
