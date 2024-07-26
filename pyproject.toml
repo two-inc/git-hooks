@@ -9,7 +9,8 @@ dependencies = [
 dev = [
   "bumpver==2022.1119",
   "pytest==6.2.5",
-  "coverage==7.5.3"
+  "coverage==7.5.3",
+  "pre-commit==3.7.1",
 ]
 
 [project.scripts]

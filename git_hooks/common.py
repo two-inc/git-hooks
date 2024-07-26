@@ -1,39 +1,59 @@
-commit_types = [
-    "build    updating build configuration, development tools",
-    "chore    updating grunt tasks etc.",
-    "ci       updating deployment configuration",
-    "docs     changes to documentation",
-    "fix      patching a bug in the codebase",
-    "feat     adding a new feature to the code",
-    "feat!    adding a new feature that introduces breaking API change",
-    "hotfix   updating a bug in production",
-    "perf     updating code to make performance enhancements",
-    "refactor updating code without any functional change",
-    "revert   updating code to earlier change",
-    "style    formatting changes, missing semicolons, etc.",
-    "test     for adding missing tests, refactoring tests; no production code change",
+commit_types: dict[str, str] = {
+    "build": "updating build configuration, development tools",
+    "chore": "updating grunt tasks etc.",
+    "ci": "updating deployment configuration",
+    "docs": "changes to documentation",
+    "fix": "patching a bug in the codebase",
+    "feat": "adding a new feature to the code",
+    "feat!": "adding a new feature that introduces breaking API change",
+    "hotfix": "updating a bug in production",
+    "perf": "updating code to make performance enhancements",
+    "refactor": "updating code without any functional change",
+    "revert": "updating code to earlier change",
+    "style": "formatting changes, missing semicolons, etc.",
+    "test": "for adding missing tests, refactoring tests; no production code change",
+}
+
+commit_types_title: str = "Valid conventional commit types are:"
+commit_types_block: str = "\t" + "\n\t".join(
+    [f"{k.ljust(10)}{v}" for k, v in commit_types.items()]
+)
+commit_types_doc: str = f"""
+{commit_types_title}
+
+{commit_types_block}
+"""
+commit_types_doc_commented: str = "\n".join(
+    [
+        f"# {commit_types_title}",
+        "#" + commit_types_block.replace("\n", "\n#"),
+    ]
+)
+
+commit_type_regex: str = f"(?:{'|'.join(commit_types.keys())})"
+teams: list[str] = [
+    "ATL",
+    "CET",
+    "DEL",
+    "INF",
+    "KNA",
+    "L2",
+    "NOR",
+    "T",
 ]
-
-commit_type_doc = (
-    """Valid conventional commit types are:
-
-\t"""
-    + "\n\t".join(commit_types)
-    + "\n"
+linear_ref: str = (
+    "(?:"
+    f"{'|'.join(t for t in teams)}"
+    "|"
+    f"{'|'.join(t.lower() for t in teams)}"
+    ")-[0-9]{1,5}"
 )
-
-commented_commit_type_doc = "# " + commit_type_doc.replace("\n", "\n#")
-
-commit_type_regex = (
-    "(?:build|chore|ci|docs|feat|fix|hotfix|perf|refactor|revert|style|test)"
-)
-linear_ref = "(?:t|T|kna|KNA|cet|CET|nor|NOR|l2|L2|del|DEL)-[0-9]{1,5}"
-valid_commit_regex = (
+valid_commit_regex: str = (
     f"^{linear_ref}/{commit_type_regex}!?: |Merge .+|Revert .+|Bump version .+"
 )
-partial_branch_regex = f"({linear_ref})[-|_](.*)"
-branch_regex = f"^(.*)/{partial_branch_regex}"
-commit_msg_title_regex = f"^({commit_type_regex}!?):? (.*)"
-commit_msg_issue_regex = f"^({linear_ref})/(.*)"
-issue_regex = f"^{linear_ref}$"
-prefix_regex = f"^({commit_type_regex})"
+partial_branch_regex: str = f"({linear_ref})[-|_](.*)"
+branch_regex: str = f"^(.*)/{partial_branch_regex}"
+commit_msg_title_regex: str = f"^({commit_type_regex}!?):? (.*)"
+commit_msg_issue_regex: str = f"^({linear_ref})/(.*)"
+issue_regex: str = f"^{linear_ref}$"
+prefix_regex: str = f"^({commit_type_regex})"
