@@ -23,7 +23,7 @@ and a conventional commit type, e.g.
 
 See https://github.com/two-inc/git-hooks/blob/24.06.24/README.md for more info.
 {ENDC}
-{common.commit_type_doc}
+{common.commit_types_doc}
 """
 
 

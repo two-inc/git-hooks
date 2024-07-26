@@ -170,7 +170,7 @@ def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
     commit_msg_title = (
         commit_msg_title_data["commit_msg_title"] or branch_data["commit_msg_title"]
     )
-    commit_type_lines = [common.commented_commit_type_doc] if edit_mode else []
+    commit_type_lines = [common.commit_types_doc_commented] if edit_mode else []
     linear_commit_msg_lines = (
         [linear_data["commit_msg_body"]] if linear_data.get("commit_msg_body") else []
     )
