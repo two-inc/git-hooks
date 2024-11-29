@@ -51,6 +51,7 @@ Alternatively, you can use ssh
 ### 1. Create virtual environment
 
 ```bash
+source venv/bin/activate
 python3 -m venv venv
 ```
 
