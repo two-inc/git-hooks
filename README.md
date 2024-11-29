@@ -19,7 +19,7 @@ To only check for a reference to a Linear issue in your commit message, add this
 ```yaml
 # .pre-commit-config.yaml
 - repo: https://github.com/two-inc/git-hooks.git
-  rev: 24.07.26
+  rev: 24.11.29
     hooks:
       - id: linear-ref
 ```
@@ -31,7 +31,7 @@ this:
 ```yaml
 # .pre-commit-config.yaml
 - repo: https://github.com/two-inc/git-hooks.git
-  rev: 24.07.26
+  rev: 24.11.29
     hooks:
       - id: commit-type-with-linear-ref
 ```
@@ -41,7 +41,7 @@ Alternatively, you can use ssh
 ```yaml
 # .pre-commit-config.yaml
 - repo: git@github.com:two-inc/git-hooks.git
-  rev: 24.07.26
+  rev: 24.11.29
     hooks:
       - id: commit-type-with-linear-ref
 ```
@@ -51,6 +51,7 @@ Alternatively, you can use ssh
 ### 1. Create virtual environment
 
 ```bash
+source venv/bin/activate
 python3 -m venv venv
 ```
 

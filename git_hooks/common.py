@@ -32,9 +32,11 @@ commit_types_doc_commented: str = "\n".join(
 
 commit_type_regex: str = f"(?:{'|'.join(commit_types.keys())})"
 teams: list[str] = [
+    "ABN",
     "ATL",
     "CET",
     "DEL",
+    "FE",
     "INF",
     "KNA",
     "L2",

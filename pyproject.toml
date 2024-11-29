@@ -1,6 +1,6 @@
 [project]
 name = "git-hooks"
-version = "24.07.26"
+version = "24.11.29"
 dependencies = [
   "gql[requests]==3.4.1",
 ]
@@ -18,7 +18,7 @@ prepare-commit-msg = "git_hooks.prepare_commit_msg:main"
 commit-msg = "git_hooks.commit_msg:main"
 
 [tool.bumpver]
-current_version = "24.07.26"
+current_version = "24.11.29"
 version_pattern = "0Y.0M.0D[-INC0]"
 commit_message = "Bump version {old_version} -> {new_version}"
 commit = true
