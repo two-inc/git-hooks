@@ -32,22 +32,18 @@ commit_types_doc_commented: str = "\n".join(
 
 commit_type_regex: str = f"(?:{'|'.join(commit_types.keys())})"
 teams: list[str] = [
-    "ABN",
-    "ATL",
-    "CET",
-    "DEL",
-    "FE",
-    "INF",
-    "KNA",
-    "L2",
-    "NOR",
     "T",
+    "L2",
 ]
 linear_ref: str = (
     "(?:"
     f"{'|'.join(t for t in teams)}"
     "|"
+    r"[A-Z]{3}"
+    "|"
     f"{'|'.join(t.lower() for t in teams)}"
+    "|"
+    r"[a-z]{3}"
     ")-[0-9]{1,5}"
 )
 valid_commit_regex: str = (

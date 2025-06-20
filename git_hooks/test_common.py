@@ -22,11 +22,11 @@ def test_commit_type_regex(commit_type: str):
     "issue",
     [
         "T-1234",
-        "KNA-1234",
-        "CET-1234",
-        "NOR-1234",
         "L2-1234",
-        "DEL-14",
+        "ABC-1234",
+        "xyz-1234",
+        "T-1",
+        "L2-99999",
     ],
 )
 def test_linear_ref(issue: str):
@@ -37,12 +37,11 @@ def test_linear_ref(issue: str):
     "commit",
     [
         "T-1234/feat: ",
-        "T-1234/fix: ",
-        "KNA-1234/hotfix: ",
-        "CET-1234/docs: ",
-        "NOR-1234/style: ",
-        "L2-1234/test: ",
-        "DEL-14/refactor: "
+        "L2-1234/fix: ",
+        "ABC-1234/hotfix: ",
+        "xyz-1234/docs: ",
+        "T-1/style: ",
+        "L2-99999/test: ",
     ],
 )
 def test_valid_commit_regex(commit: str):
@@ -53,11 +52,11 @@ def test_valid_commit_regex(commit: str):
     "branch",
     [
         "hotfix/T-1234-fix-something",
-        "hotfix/brtknr/KNA-1234-add-something",
-        "feat/CET-1234-fix-something",
-        "bharat/L2-1234-add-something",
-        "brtkwr/cet-281-fix-company-search-gb-bucket-permission",
-        "shelmig/del-13-update-credentials",
+        "feat/L2-1234-add-something",
+        "fix/ABC-1234-fix-something",
+        "bharat/xyz-1234-add-something",
+        "brtkwr/abc-281-fix-company-search-gb-bucket-permission",
+        "shelmig/xyz-13-update-credentials",
     ],
 )
 def test_branch_regex(branch: str):
@@ -87,12 +86,11 @@ def test_commit_msg_title_regex(commit_msg: str):
     "commit_msg",
     [
         "T-1234/feat: add something",
-        "KNA-1234/fix: fix something",
-        "CET-1234/hotfix: fix something",
-        "NOR-1234/docs: add something",
-        "L2-1234/style add something",
-        "T-1234/test: add something",
-        "DEL-1234/test: add something",
+        "L2-1234/fix: fix something",
+        "ABC-1234/hotfix: fix something",
+        "xyz-1234/docs: add something",
+        "T-1/style add something",
+        "L2-99999/test: add something",
     ],
 )
 def test_commit_msg_issue_regex(commit_msg: str):
@@ -105,11 +103,11 @@ def test_commit_msg_issue_regex(commit_msg: str):
     "issue",
     [
         "T-1234",
-        "KNA-1234",
-        "CET-1234",
-        "NOR-1234",
         "L2-1234",
-        "DEL-1234",
+        "ABC-1234",
+        "xyz-1234",
+        "T-1",
+        "L2-99999",
     ],
 )
 def test_issue_regex(issue: str):
