@@ -21,7 +21,7 @@ and a conventional commit type, e.g.
 
     T-5482/feat: Amazing new feature
 
-See https://github.com/two-inc/git-hooks/blob/24.11.29/README.md for more info.
+See https://github.com/two-inc/git-hooks/blob/25.06.20/README.md for more info.
 {ENDC}
 {common.commit_types_doc}
 """
