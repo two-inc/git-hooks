@@ -1,15 +1,18 @@
 [project]
 name = "git-hooks"
 version = "24.11.29"
-dependencies = [
-  "gql[requests]==3.4.1",
-]
+dependencies = ["gql[requests]==3.4.1"]
+requires-python = ">=3.10"
 
-[project.optional-dependencies]
-dev = [
+[tool.uv]
+package = true
+
+
+[dependency-groups]
+test = [
   "bumpver==2022.1119",
   "pytest==6.2.5",
-  "coverage==7.5.3",
+  "pytest-cov>=6.1.1",
   "pre-commit==3.7.1",
 ]
 
@@ -26,13 +29,19 @@ tag = true
 push = true
 
 [tool.bumpver.file_patterns]
-"pyproject.toml" = [
-    '^version = "{version}"',
-    '^current_version = "{version}"',
-]
-"README.md" = [
-    'rev: {version}',
-]
-"git_hooks/commit_msg.py" = [
-    'two-inc/git-hooks/blob/{version}/README.md'
-]
+"pyproject.toml" = ['^version = "{version}"', '^current_version = "{version}"']
+"README.md" = ['rev: {version}']
+"git_hooks/commit_msg.py" = ['two-inc/git-hooks/blob/{version}/README.md']
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+skip_empty = false
+# Always show the report by default
+fail_under = 0
+
+[tool.pytest.ini_options]
+addopts = "--cov=git_hooks --cov-report=term"
