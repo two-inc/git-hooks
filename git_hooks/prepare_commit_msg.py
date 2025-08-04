@@ -1,6 +1,7 @@
 """This hook prepares a commit message containing a reference to a Linear issue as well as a conventional commit type.
 It uses the branch name to determine the issue number and the commit message title as well as the conventional commit type.
 If LINEAR_API_KEY is set, it fetches the issue title and description from Linear and populates the commit message with it.
+If DEFAULT_COMMIT_TYPE is set, it uses that as the default commit type when none is detected (defaults to "feat").
 See https://www.conventionalcommits.org for examples of conventional commit types.
 """
 
@@ -16,6 +17,7 @@ from git_hooks import common
 EDITOR_TEXT = "# Please enter the commit message for your changes."
 
 LINEAR_API_KEY = os.environ.get("LINEAR_API_KEY")
+DEFAULT_COMMIT_TYPE = os.environ.get("DEFAULT_COMMIT_TYPE", "feat")
 
 
 # Convert branch name to commit message
@@ -27,7 +29,7 @@ def branch_to_commit_msg(branch: str) -> str:
 def prefix_to_commit_type(prefix: str) -> str:
     if prefix_match := re.match(common.prefix_regex, prefix):
         return prefix_match.group(1)
-    return "fix"
+    return DEFAULT_COMMIT_TYPE
 
 
 def get_branch_name() -> str | None:
@@ -166,7 +168,7 @@ def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
     commit_msg_title_data = extract_commit_msg_title_data(
         linear_data.get("commit_msg_title") or raw_commit_msg_title
     )
-    commit_type = commit_msg_title_data["commit_type"] or branch_data["commit_type"]
+    commit_type = commit_msg_title_data["commit_type"] or branch_data["commit_type"] or DEFAULT_COMMIT_TYPE
     commit_msg_title = (
         commit_msg_title_data["commit_msg_title"] or branch_data["commit_msg_title"]
     )
