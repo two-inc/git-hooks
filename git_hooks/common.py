@@ -34,6 +34,7 @@ commit_type_regex: str = f"(?:{'|'.join(commit_types.keys())})"
 teams: list[str] = [
     "T",
     "L2",
+    "DAE"
 ]
 linear_ref: str = (
     "(?:"
