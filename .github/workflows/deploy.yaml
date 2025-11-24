@@ -11,7 +11,7 @@ on:
 
 jobs:
   pytest:
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER_STANDARD }}
     permissions:
       contents: read
       id-token: write
