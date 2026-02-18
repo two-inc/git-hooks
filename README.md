@@ -40,7 +40,7 @@ Alternatively, you can use ssh
 
 ```yaml
 # .pre-commit-config.yaml
-- repo: git@github.com:two-inc/git-hooks.git
+- repo: https://github.com/two-inc/git-hooks
   rev: 25.08.04
     hooks:
       - id: commit-type-with-linear-ref
