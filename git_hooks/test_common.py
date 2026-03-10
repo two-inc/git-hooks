@@ -27,6 +27,7 @@ def test_commit_type_regex(commit_type: str):
         "xyz-1234",
         "T-1",
         "L2-99999",
+        "PDEV-1234",
     ],
 )
 def test_linear_ref(issue: str):
@@ -42,6 +43,7 @@ def test_linear_ref(issue: str):
         "xyz-1234/docs: ",
         "T-1/style: ",
         "L2-99999/test: ",
+        "PDEV-1234/feat: ",
     ],
 )
 def test_valid_commit_regex(commit: str):
@@ -91,6 +93,7 @@ def test_commit_msg_title_regex(commit_msg: str):
         "xyz-1234/docs: add something",
         "T-1/style add something",
         "L2-99999/test: add something",
+        "PDEV-1234/feat: add something",
     ],
 )
 def test_commit_msg_issue_regex(commit_msg: str):
@@ -108,6 +111,7 @@ def test_commit_msg_issue_regex(commit_msg: str):
         "xyz-1234",
         "T-1",
         "L2-99999",
+        "PDEV-1234",
     ],
 )
 def test_issue_regex(issue: str):

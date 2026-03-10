@@ -34,17 +34,18 @@ commit_type_regex: str = f"(?:{'|'.join(commit_types.keys())})"
 teams: list[str] = [
     "T",
     "L2",
-    "DAE"
+    "DAE",
+    "PDEV"
 ]
 linear_ref: str = (
     "(?:"
     f"{'|'.join(t for t in teams)}"
     "|"
-    r"[A-Z]{3}"
+    r"[A-Z]{1,4}"
     "|"
     f"{'|'.join(t.lower() for t in teams)}"
     "|"
-    r"[a-z]{3}"
+    r"[a-z]{1,4}"
     ")-[0-9]{1,5}"
 )
 valid_commit_regex: str = (
