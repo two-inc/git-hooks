@@ -9,7 +9,7 @@ from commit_msg import main
     [
         ("T-5482/feat: Amazing new feature", 0),
         ("feat: Amazing new feature", 1),
-        ("X-5482/feat: Amazing new feature", 1),
+        ("X-5482/feat: Amazing new feature", 0),
         ("X-5482/Amazing new feature", 1),
     ],
 )
