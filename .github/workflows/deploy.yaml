@@ -17,7 +17,7 @@ jobs:
       id-token: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
         with:
@@ -27,7 +27,7 @@ jobs:
       - name: Run pytest
         run: uv run pytest --cov=git_hooks --cov-report=xml:coverage.xml --durations=10
       - name: Get Cover
-        uses: orgoro/coverage@v3.2
+        uses: orgoro/coverage@v3.3.1
         if: ${{ github.event_name == 'pull_request' }}
         with:
           coverageFile: coverage.xml
