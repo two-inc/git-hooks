@@ -41,3 +41,7 @@ repos:
         language: python
         entry: prepare-commit-msg
         stages: [prepare-commit-msg]
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.10.0
+    hooks:
+      - id: uv-lock
