@@ -21,6 +21,7 @@ prepare-commit-msg = "git_hooks.prepare_commit_msg:main"
 commit-msg = "git_hooks.commit_msg:main"
 
 [tool.bumpver]
+pre_commit_hook = "bin/bumpver-hook.sh"
 current_version = "26.03.10"
 version_pattern = "0Y.0M.0D[-INC0]"
 commit_message = "Bump version {old_version} -> {new_version}"
