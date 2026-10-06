@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.10"
 
 [[package]]
@@ -209,7 +209,7 @@ wheels = [
 
 [[package]]
 name = "git-hooks"
-version = "26.3.10"
+version = "26.10.6"
 source = { editable = "." }
 dependencies = [
     { name = "gql", extra = ["requests"] },
