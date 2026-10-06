@@ -63,12 +63,8 @@ pip3 install -e '.[dev]'
 
 ### 3. Release
 
-1. If you have permission to push to main directly, skip to step 2. Otherwise
-   create a new Linear ticket with a title "git-hooks release X.Y.Z" and a new
-   branch based on that Linear ticket branching off of main.
-2. Run `bumpver update --dry` to check version update will be as expected.
-3. Run `bumpver update` to update git-hooks version. This creates a bump commit.
-4. Push directly to `main` if you have permission to do so or via a PR if not.
-5. Check out `main` branch and set tag with `git tag X.Y.Z` based on [CalVer](https://calver.org/) convention.
-6. Push tags with `git push --tags`.
-7. Go to GH and draft a new release - choose tag and select "generate release notes".
+Run the [Release workflow](https://github.com/two-inc/git-hooks/actions/workflows/release.yaml)
+(Actions -> Release -> Run workflow). It runs `bumpver update` on `main`, which
+commits the bump, tags it with today's [CalVer](https://calver.org/) version and
+pushes, then creates a GitHub release with generated notes. Set `version` to
+override the date-based version. Then bump `rev:` in consuming repos.
