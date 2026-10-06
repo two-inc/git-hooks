@@ -64,8 +64,8 @@ def retrieve_linear_issue(issue: str) -> dict[str, str]:
         }
         """
     )
-    values = {"issue": issue}
-    response = client.execute(query, variable_values=values)
+    query.variable_values = {"issue": issue}
+    response = client.execute(query)
     title = response["issue"]["title"]
     description = response["issue"]["description"]
     return {
@@ -168,7 +168,11 @@ def prepare_commit_msg(raw_commit_msg: str, branch: str) -> str:
     commit_msg_title_data = extract_commit_msg_title_data(
         linear_data.get("commit_msg_title") or raw_commit_msg_title
     )
-    commit_type = commit_msg_title_data["commit_type"] or branch_data["commit_type"] or DEFAULT_COMMIT_TYPE
+    commit_type = (
+        commit_msg_title_data["commit_type"]
+        or branch_data["commit_type"]
+        or DEFAULT_COMMIT_TYPE
+    )
     commit_msg_title = (
         commit_msg_title_data["commit_msg_title"] or branch_data["commit_msg_title"]
     )
