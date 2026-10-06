@@ -71,6 +71,9 @@ def test_retrieve_linear_issue(mock_linear_client):
         "title": "Title",
         "description": "Description\n\n",
     }
+    (request,), kwargs = mock_client.execute.call_args
+    assert request.variable_values == {"issue": "T-5482"}
+    assert kwargs == {}
 
 
 @pytest.mark.parametrize(
@@ -205,7 +208,9 @@ def test_extract_commit_msg_title_data(commit_msg_title, expected):
         ),
     ],
 )
-def test_prepare_commit_msg_with_default_commit_type(raw_commit_msg, branch, expected_commit_msg):
+def test_prepare_commit_msg_with_default_commit_type(
+    raw_commit_msg, branch, expected_commit_msg
+):
     result = prepare_commit_msg(raw_commit_msg, branch)
     assert result == expected_commit_msg
 
@@ -232,7 +237,9 @@ def test_prepare_commit_msg_with_default_commit_type(raw_commit_msg, branch, exp
         ),
     ],
 )
-def test_prepare_commit_msg_with_custom_default_commit_type(raw_commit_msg, branch, expected_commit_msg):
+def test_prepare_commit_msg_with_custom_default_commit_type(
+    raw_commit_msg, branch, expected_commit_msg
+):
     result = prepare_commit_msg(raw_commit_msg, branch)
     assert result == expected_commit_msg
 
