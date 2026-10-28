@@ -7,6 +7,10 @@ requires-python = ">=3.10"
 [tool.uv]
 package = true
 
+# Test tooling only: filelock>=4.2.1 (GHSA fixes) needs 3.11, the hooks themselves still support 3.10.
+[tool.uv.dependency-groups]
+test = { requires-python = ">=3.11" }
+
 
 [dependency-groups]
 test = [
