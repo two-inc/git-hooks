@@ -20,13 +20,15 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: read
+      # ISEC-853: lets app-token read the App key from Secret Manager
+      id-token: write
     steps:
       - name: Generate GitHub App token
         id: app-token
-        uses: actions/create-github-app-token@v3
+        uses: two-inc/actions-public/app-token@main
         with:
           client-id: ${{ vars.TWO_INC_APP_CLIENT_ID }}
-          private-key: ${{ secrets.TWO_INC_APP_PRIVATE_KEY }}
+          repositories: ${{ github.event.repository.name }}
 
       - name: Get GitHub App User ID
         id: get-user-id
